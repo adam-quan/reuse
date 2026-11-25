@@ -8,7 +8,7 @@ Sooner or later every company running Temporal finds the same thing: three teams
 
 The good news: **the Activity and Workflow code is identical in all three**. Only the way it is called changes. So you can start simple and promote a capability to a service later without rewriting it.
 
-The full demo code is on GitHub: [reusable-library](https://github.com/example/reusable-library) *(replace with the real repo link)*.
+The full demo code is on GitHub: [reusable](https://github.com/adam-quan/reuse).
 
 ## The example: one platform team, three consumers
 
