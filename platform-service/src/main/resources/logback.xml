@@ -1,0 +1,11 @@
+<configuration>
+  <appender name="OUT" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder><pattern>%d{HH:mm:ss.SSS} %-5level %-22logger{0} %msg%n</pattern></encoder>
+  </appender>
+  <logger name="io.temporal" level="WARN"/>
+  <logger name="io.grpc" level="WARN"/>
+  <!-- The demo injects a first-attempt failure on purpose; hide the SDK's retry stack traces.
+       Remove this line to see every activity attempt failure in full. -->
+  <logger name="io.temporal.internal.activity.ActivityTaskExecutors" level="ERROR"/>
+  <root level="INFO"><appender-ref ref="OUT"/></root>
+</configuration>

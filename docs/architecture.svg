@@ -1,0 +1,160 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif">
+  <title>Reusable Temporal library → reusable services: architecture</title>
+  <defs>
+    <marker id="ah-purple" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#7c3aed"/></marker>
+    <marker id="ah-orange" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#ea580c"/></marker>
+    <marker id="ah-green" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#16a34a"/></marker>
+    <marker id="ah-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2563eb"/></marker>
+    <style>
+      .t   { fill:#0f172a; }
+      .h   { font-size:15px; font-weight:700; fill:#0f172a; }
+      .b   { font-size:13px; font-weight:600; fill:#0f172a; }
+      .s   { font-size:12px; fill:#334155; }
+      .xs  { font-size:11px; fill:#475569; }
+      .m   { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size:11px; fill:#1e293b; }
+      .pill{ font-size:11px; font-weight:700; fill:#ffffff; }
+      .lbl { font-size:11.5px; font-weight:600; }
+    </style>
+  </defs>
+
+  <rect width="1200" height="800" fill="#ffffff"/>
+
+  <!-- Title -->
+  <text x="40" y="38" font-size="20" font-weight="700" class="t">Reusable Temporal library → reusable services</text>
+  <text x="1160" y="38" text-anchor="end" class="xs">same activity &amp; workflow code · three ways to consume it</text>
+
+  <!-- ===================== PLATFORM NAMESPACE ===================== -->
+  <rect x="40" y="58" width="1120" height="310" rx="14" fill="#eff6ff" stroke="#2563eb" stroke-width="2"/>
+  <text x="60" y="86" class="h">namespace: platform</text>
+  <text x="222" y="86" class="s">task queue <tspan class="m">platform-services</tspan> · PlatformWorker, owned &amp; run by the Platform team</text>
+
+  <!-- platform-library -->
+  <rect x="70" y="104" width="560" height="236" rx="10" fill="#ffffff" stroke="#93c5fd" stroke-width="1.5"/>
+  <text x="88" y="128" class="b">platform-library</text>
+  <text x="212" y="128" class="xs">reusable code, written once · shipped as PlatformPlugin (SimplePlugin)</text>
+
+  <!-- PaymentActivities -->
+  <rect x="88" y="145" width="240" height="100" rx="8" fill="#dbeafe" stroke="#3b82f6"/>
+  <text x="104" y="169" class="b">PaymentActivities</text>
+  <text x="104" y="188" class="m">payments.*.v1</text>
+  <text x="104" y="210" class="xs">fraudCheck · authorizeCard</text>
+  <text x="104" y="227" class="xs">captureCharge · voidAuthorization</text>
+
+  <!-- PaymentWorkflow -->
+  <rect x="360" y="145" width="250" height="100" rx="8" fill="#dbeafe" stroke="#3b82f6"/>
+  <text x="376" y="169" class="b">PaymentWorkflow (saga)</text>
+  <text x="376" y="188" class="m">payments.ProcessPayment.v1</text>
+  <text x="376" y="210" class="xs">fraud check → authorize → capture</text>
+  <text x="376" y="227" class="xs">void authorization if capture fails</text>
+  <line x1="360" y1="195" x2="330" y2="195" stroke="#2563eb" stroke-width="1.6" marker-end="url(#ah-blue)"/>
+
+  <!-- SendEmail -->
+  <rect x="88" y="264" width="522" height="58" rx="8" fill="#dbeafe" stroke="#3b82f6"/>
+  <text x="104" y="288" class="b">NotificationActivities.sendEmail</text>
+  <text x="104" y="308" class="m">notifications.SendEmail.v1</text>
+  <text x="594" y="298" text-anchor="end" class="xs">idempotency key → Activity ID</text>
+
+  <!-- Nexus service -->
+  <rect x="680" y="104" width="450" height="236" rx="10" fill="#f5f3ff" stroke="#7c3aed" stroke-width="1.5"/>
+  <text x="698" y="128" class="b">Nexus service</text>
+  <text x="800" y="128" class="m">platform.v1</text>
+  <text x="890" y="128" class="xs">· PlatformServiceImpl</text>
+
+  <rect x="700" y="157" width="410" height="76" rx="8" fill="#ede9fe" stroke="#8b5cf6"/>
+  <text x="716" y="180" class="b">process-payment</text>
+  <text x="716" y="200" class="m">client.startWorkflow(PaymentWorkflow::process)</text>
+  <text x="716" y="220" class="xs">multi-step orchestration → backed by a workflow</text>
+
+  <rect x="700" y="264" width="410" height="58" rx="8" fill="#ede9fe" stroke="#8b5cf6"/>
+  <text x="716" y="287" class="b">send-email</text>
+  <text x="1094" y="287" text-anchor="end" class="xs">single step → standalone activity</text>
+  <text x="716" y="307" class="m">client.startActivity(NotificationActivities::sendEmail)</text>
+
+  <line x1="700" y1="195" x2="613" y2="195" stroke="#7c3aed" stroke-width="1.8" marker-end="url(#ah-purple)"/>
+  <text x="656" y="188" text-anchor="middle" class="xs">starts</text>
+  <line x1="700" y1="293" x2="613" y2="293" stroke="#7c3aed" stroke-width="1.8" marker-end="url(#ah-purple)"/>
+  <text x="656" y="286" text-anchor="middle" class="xs">starts</text>
+
+  <!-- ===================== CONNECTORS ===================== -->
+  <!-- Orders -> endpoint -> Nexus service -->
+  <rect x="760" y="398" width="340" height="44" rx="22" fill="#7c3aed"/>
+  <text x="930" y="418" text-anchor="middle" class="pill">Nexus endpoint</text>
+  <text x="930" y="433" text-anchor="middle" class="pill" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-weight="500">platform-services-endpoint</text>
+  <line x1="970" y1="398" x2="970" y2="344" stroke="#7c3aed" stroke-width="2.2" marker-end="url(#ah-purple)"/>
+  <line x1="970" y1="482" x2="970" y2="446" stroke="#7c3aed" stroke-width="2.2" marker-end="url(#ah-purple)"/>
+  <text x="958" y="388" text-anchor="end" class="lbl" fill="#7c3aed">routes to platform-services</text>
+  <text x="982" y="468" class="lbl" fill="#7c3aed">typed Nexus call</text>
+
+  <!-- Marketing -> standalone activity -->
+  <line x1="590" y1="482" x2="590" y2="326" stroke="#ea580c" stroke-width="2.2" marker-end="url(#ah-orange)"/>
+  <text x="580" y="446" text-anchor="end" class="lbl" fill="#ea580c">ActivityClient.execute()</text>
+  <text x="580" y="462" text-anchor="end" class="lbl" fill="#ea580c">Standalone Activity</text>
+
+  <!-- Checkout build-time dependency -->
+  <line x1="220" y1="482" x2="220" y2="344" stroke="#16a34a" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#ah-green)"/>
+  <text x="232" y="396" class="lbl" fill="#16a34a">Maven dependency on</text>
+  <text x="232" y="412" class="lbl" fill="#16a34a">platform-library (runs in its worker)</text>
+
+  <!-- ===================== TEAMS ===================== -->
+  <!-- Checkout -->
+  <rect x="40" y="484" width="360" height="256" rx="14" fill="#f0fdf4" stroke="#16a34a" stroke-width="2"/>
+  <text x="58" y="512" class="h">Team Checkout</text>
+  <rect x="216" y="496" width="168" height="22" rx="11" fill="#16a34a"/>
+  <text x="300" y="511" text-anchor="middle" class="pill">MODE 1 · Embedded library</text>
+  <text x="58" y="535" class="s">namespace: <tspan class="m">checkout</tspan></text>
+  <rect x="58" y="548" width="324" height="36" rx="7" fill="#ffffff" stroke="#16a34a"/>
+  <text x="220" y="571" text-anchor="middle" class="b">CheckoutWorkflow</text>
+  <rect x="58" y="600" width="324" height="94" rx="8" fill="#ffffff" stroke="#16a34a" stroke-dasharray="5 4"/>
+  <text x="220" y="686" text-anchor="middle" class="xs">PlatformPlugin, embedded in Checkout's worker</text>
+  <rect x="70" y="614" width="146" height="52" rx="6" fill="#dcfce7" stroke="#22c55e"/>
+  <text x="143" y="636" text-anchor="middle" class="b">PaymentWorkflow</text>
+  <text x="143" y="654" text-anchor="middle" class="xs">as a child workflow</text>
+  <rect x="226" y="614" width="144" height="52" rx="6" fill="#dcfce7" stroke="#22c55e"/>
+  <text x="298" y="636" text-anchor="middle" class="b">sendEmail</text>
+  <text x="298" y="654" text-anchor="middle" class="xs">activity, Checkout's queue</text>
+  <line x1="143" y1="584" x2="143" y2="611" stroke="#16a34a" stroke-width="1.6" marker-end="url(#ah-green)"/>
+  <line x1="298" y1="584" x2="298" y2="611" stroke="#16a34a" stroke-width="1.6" marker-end="url(#ah-green)"/>
+  <text x="58" y="718" class="xs">Runs platform code on its own worker, with its own</text>
+  <text x="58" y="732" class="xs">credentials · upgrades when it redeploys</text>
+
+  <!-- Marketing -->
+  <rect x="420" y="484" width="340" height="256" rx="14" fill="#fff7ed" stroke="#ea580c" stroke-width="2"/>
+  <text x="438" y="512" class="h">Team Marketing</text>
+  <rect x="566" y="496" width="178" height="22" rx="11" fill="#ea580c"/>
+  <text x="655" y="511" text-anchor="middle" class="pill">MODE 2 · Standalone Activity</text>
+  <text x="438" y="535" class="s">plain Java app, <tspan font-weight="600">no workflows</tspan></text>
+  <rect x="438" y="548" width="304" height="36" rx="7" fill="#ffffff" stroke="#ea580c"/>
+  <text x="590" y="571" text-anchor="middle" class="b">CampaignSender</text>
+  <rect x="438" y="600" width="304" height="94" rx="8" fill="#ffffff" stroke="#fdba74"/>
+  <text x="452" y="622" class="m">PlatformClients.sendEmailStandalone(</text>
+  <text x="452" y="638" class="m">    activityClient, request)</text>
+  <text x="452" y="662" class="xs">ID = email:&lt;campaign&gt;:&lt;user&gt;</text>
+  <text x="452" y="678" class="xs">re-run → same result, no duplicate email</text>
+  <text x="438" y="718" class="xs">Durable job queue: retries, timeouts, dedupe,</text>
+  <text x="438" y="732" class="xs">visibility · depends on platform-api only</text>
+
+  <!-- Orders -->
+  <rect x="780" y="484" width="380" height="256" rx="14" fill="#faf5ff" stroke="#7c3aed" stroke-width="2"/>
+  <text x="798" y="512" class="h">Team Orders</text>
+  <rect x="1022" y="496" width="122" height="22" rx="11" fill="#7c3aed"/>
+  <text x="1083" y="511" text-anchor="middle" class="pill">MODE 3 · Nexus</text>
+  <text x="798" y="535" class="s">namespace: <tspan class="m">orders</tspan></text>
+  <rect x="798" y="548" width="344" height="36" rx="7" fill="#ffffff" stroke="#7c3aed"/>
+  <text x="970" y="571" text-anchor="middle" class="b">OrderWorkflow</text>
+  <rect x="798" y="600" width="344" height="94" rx="8" fill="#ffffff" stroke="#c4b5fd"/>
+  <text x="812" y="622" class="m">PlatformService platform =</text>
+  <text x="812" y="638" class="m">    PlatformClients.nexus();</text>
+  <text x="812" y="660" class="m">platform.processPayment(req);</text>
+  <text x="812" y="676" class="m">platform.sendEmail(req);</text>
+  <text x="798" y="718" class="xs">Cross-namespace, durable, typed · depends on</text>
+  <text x="798" y="732" class="xs">platform-api only · no platform code deployed</text>
+
+  <!-- Legend -->
+  <line x1="40" y1="772" x2="80" y2="772" stroke="#475569" stroke-width="2"/>
+  <text x="88" y="776" class="xs">runtime call</text>
+  <line x1="180" y1="772" x2="220" y2="772" stroke="#475569" stroke-width="2" stroke-dasharray="7 5"/>
+  <text x="228" y="776" class="xs">build-time dependency</text>
+  <rect x="380" y="764" width="16" height="16" rx="3" fill="#dbeafe" stroke="#3b82f6"/>
+  <text x="404" y="776" class="xs">platform code</text>
+  <text x="1160" y="776" text-anchor="end" class="xs">Standalone Activities: GA · Nexus: GA · activity-backed Nexus operations: Pre-release</text>
+</svg>
